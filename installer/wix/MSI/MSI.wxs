@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <!-- We define the main product as "Example Flutter App" here. Please change
+         the name of the product and the manufacturer, and the upgrade code to
+         yours. You also need to change the version number each time when you
+         release a new version of your software. -->
+    <Product Id="*" Name="Example App" Language="1033" Version="1.0.0" Manufacturer="Your_Company" Codepage="1252" UpgradeCode="fb33c473-aba8-4933-b433-e96227a925ac">
+        <!-- A product can contain lots of packages, but we have only one
+             package here. Please change the package description and
+             manufacturer here as well.
+
+             Please note that we specify the package to be installer per user.
+             It means, a user does not need the administrator privilege to
+             install the app into the computer, and the app would be installed
+             into "AppData\Roaming" folder under current user's home folder.
+
+             However, if you wnat to write data into system folders, such as
+             installing drivers along with your app, please change "perUser" to
+             "perMechine". See https://wixtoolset.org/documentation/manual/v4/reference/wxs/package/
+            -->
+        <Package Description="Example App" Comments="The main package of the example app" InstallerVersion="300" Compressed="yes" Manufacturer="Your_Company" Platform="x64" InstallScope="perUser" />
+        <Media Id="1" Cabinet="Product.cab" EmbedCab="yes" />
+        <Property Id="PREVIOUSVERSIONSINSTALLED" Secure="yes" />
+        <!-- Flutter app requires 64bit Windows. -->
+        <Condition Message="This application requires 64bit Windows.">VersionNT64</Condition>
+        <MajorUpgrade DowngradeErrorMessage="Downgrade is not supported" AllowSameVersionUpgrades="yes" />
+
+        <!-- We use registry to save the installation folder of our app, so the
+             installer can find the previous installed files when doing upgrde.
+
+             If you want to install your app for per machine but not per user,
+             change HKCU to HKLM.
+            -->
+        <Property Id="INSTALLDIR">
+            <RegistrySearch Id="DetermineInstallLocation" Type="raw" Root="HKCU" Key="SOFTWARE\Your_Company\Example_App" Name="InstallLocation" />
+        </Property>
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <!-- AppDataFolder is the "AppData\Roaming" folder under the home
+                 folder of the current user. If you want to install you software
+                 per machine, please change it to "ProgramFiles64Folder".  -->
+            <Directory Id="AppDataFolder">
+                <!-- Change this to your company. -->
+                <Directory Id="ProgramFilesYourCompany" Name="Your_Company">
+                    <!-- Change this to your app name.  -->
+                    <Directory Id="INSTALLDIR" Name="Example App">
+                        <!-- Here, we define the files to be installed. Please
+                             take a look at your "build\windows\runner\Release"
+                             folder. All the files under that folder should be
+                             included. -->
+                        <Component Id="Main" Guid="e5c6ee93-39eb-4224-9020-b6d68b4d3d71">
+                            <!-- The main folder. If your app use additional
+                                 plugins, you need to add the dll files here. -->
+                            <File Id="flutter_wix_installer_example" Source="..\..\..\build\windows\runner\Release\flutter_wix_installer_example.exe" />
+                            <File Id="flutter_windows" Source="..\..\..\build\windows\runner\Release\flutter_windows.dll" />
+                            <RemoveFile Id="RemoveFilesFromAppDirectory" Name="*.*" On="uninstall" />
+                        </Component>
+                        <Component Id="RegValInstallLocation_comp" Guid="ef1875c0-901d-4f19-b4aa-d4061ccc86df">
+                            <!-- Please change Your_Company and Example_App.
+                                 Also, please change HKCU to HKLM if you want to
+                                 install your app for per machine. -->
+                            <RegistryKey Root="HKCU" Key="SOFTWARE\Your_Company\Example_App">
+                                <RegistryValue Name="InstallLocation" Value="[INSTALLDIR]" Type="string" KeyPath="yes" />
+                            </RegistryKey>
+                        </Component>
+
+                        <Directory Id="DATA" Name="data">
+                            <Component Id="Data" Guid="70d420a4-7705-4011-a616-51ed87706866">
+                                <File Source="..\..\..\build\windows\runner\Release\data\app.so" />
+                                <File Id="flutter_icudtl" Source="..\..\..\build\windows\runner\Release\data\icudtl.dat" />
+                            </Component>
+                            <Directory Id="FLUTTER_ASSETS" Name="flutter_assets">
+                                <Component Id="AssetsRoot" Guid="a9c3f3a5-ad77-43c9-90b1-2639dc89f6d5">
+                                    <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\AssetManifest.json" />
+                                    <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\FontManifest.json" />
+                                </Component>
+                                <Directory Id="FONTS" Name="fonts">
+                                    <Component Id="Fonts" Guid="e452066d-6af5-4769-b18e-b701948afe77">
+                                        <File Id="MaterialIcons_Regular.otf" Source="..\..\..\build\windows\runner\Release\data\flutter_assets\fonts\MaterialIcons-Regular.otf" />
+                                    </Component>
+                                </Directory>
+
+                                <!-- Add your images and then uncomment this! -->
+
+                                <!-- <Directory Id="IMAGES" Name="images">
+                                    <Component Id="Images" Guid="8d752c46-d5fd-4287-a7c2-d78b6822f28f">
+
+                                    </Component>
+                                </Directory> -->
+                                <Directory Id="PACKAGES" Name="packages">
+                                    <Directory Id="CUPERTINO_ICONS" Name="cupertino_icons">
+                                        <Directory Id="CUPERTINO_ICONS_ASSETS" Name="assets">
+                                            <Component Id="CuppertinoIconsAssets" Guid="af900c61-a1c2-4d18-8f14-b307d9627620">
+                                                <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\cupertino_icons\assets\CupertinoIcons.ttf" />
+                                            </Component>
+                                        </Directory>
+                                    </Directory>
+
+                                    <!-- 
+                                    <Directory Id="FONT_AWESOME_FLUTTER" Name="font_awesome_flutter">
+                                        <Directory Id="FONT_AWESOME_FLUTTER_LIB" Name="lib">
+                                            <Directory Id="FONT_AWESOME_FLUTTER_FONTS" Name="fonts">
+                                                <Component Id="FontAwesomeAssets" Guid="d630be41-15bd-4b23-bbe8-39af83686171">
+                                                    <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-brands-400.ttf" />
+                                                    <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-regular-400.ttf" />
+                                                    <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-solid-900.ttf" />
+                                                </Component>
+                                            </Directory>
+                                        </Directory>
+                                    </Directory>
+                                     -->
+                                </Directory>
+                            </Directory>
+                        </Directory>
+                    </Directory>
+                </Directory>
+            </Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="Cerence" />
+            </Directory>
+            <Directory Id="DesktopFolder" Name="Desktop" />
+        </Directory>
+
+        <!-- This creates a desktop shorcut. -->
+        <DirectoryRef Id="DesktopFolder">
+            <Component Id="ApplicationShortcutDesktop" Guid="b19e317e-f960-4eb7-997d-7eb275824cac">
+                <Shortcut Id="ApplicationDesktopShortcut" Name="Example App" Description="Exmple App" Target="[#flutter_wix_installer_example]" />
+                <RemoveFolder Id="DesktopFolder" On="uninstall" />
+            </Component>
+        </DirectoryRef>
+
+        <!-- This creates a shorcut in the start menu. -->
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="3a96a992-ba44-41bb-acaf-ef64c00de8ab">
+                <Shortcut Id="ApplicationStartMenuShortcut" Name="Example App" Description="Example App" Target="[#flutter_wix_installer_example]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
+                <Shortcut Id="UninstallProduct" Name="Uninstall Example App" Description="Uninstalls Example App" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" />
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+            </Component>
+        </DirectoryRef>
+
+        <Feature Id="Complete" Title="Example App" Description="The complete package." Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR" TypicalDefault="install" Absent="disallow" InstallDefault="local" AllowAdvertise="no">
+            <Feature Id="Program" Title="Program files" Level="1" InstallDefault="local" AllowAdvertise="no" Absent="disallow" Description="The program files.">
+                <ComponentRef Id="Main" />
+                <ComponentRef Id="Data" />
+                <ComponentRef Id="AssetsRoot" />
+                <ComponentRef Id="Fonts" />
+                <!-- <ComponentRef Id="Images" /> -->
+                <ComponentRef Id="CuppertinoIconsAssets" />
+                <!-- <ComponentRef Id="FontAwesomeAssets" /> -->
+                <ComponentRef Id="ApplicationShortcut" />
+                <ComponentRef Id="ApplicationShortcutDesktop" />
+                <ComponentRef Id="RegValInstallLocation_comp" />
+            </Feature>
+        </Feature>
+
+        <InstallExecuteSequence></InstallExecuteSequence>
+
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+        <Property Id="REBOOT" Value="ReallySuppress" />
+        <WixVariable Id="WixUIBannerBmp" Value="bitmap\bannrbmp.bmp" />
+        <WixVariable Id="WixUIDialogBmp" Value="bitmap\dlgbmp.bmp" />
+
+        <Upgrade Id="959935d2-691c-47c2-bae3-ed58ee56bcd4">
+            <UpgradeVersion Minimum="1.0.0.0" Maximum="99.0.0.0" Property="PREVIOUSVERSIONSINSTALLED" IncludeMinimum="yes" IncludeMaximum="no" />
+        </Upgrade>
+    </Product>
+</Wix>

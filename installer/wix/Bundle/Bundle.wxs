@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+    <Bundle Name="Example App" Version="1.0.0" Manufacturer="Your Company." UpgradeCode="26b01213-7538-4d51-8cca-179db758e2cb">
+        <util:ProductSearch Id="VCRedist2015x64" Result="version" Variable="VCRedist2015x64" UpgradeCode="36F68A90-239C-34DF-B58C-64B30153CE35" Condition="VersionNT64" />
+        <Variable Name="VCRedist2015" Type="version" Value="14.29.30040.0" />
+
+        <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkSidebarLicense">
+            <bal:WixStandardBootstrapperApplication ShowVersion="yes" SuppressOptionsUI="yes" LicenseUrl="" LogoFile="bitmap\logo.png" LogoSideFile="bitmap\banner.png" />
+        </BootstrapperApplicationRef>
+        <Chain DisableSystemRestore="yes">
+            <PackageGroupRef Id="VCRuntime" />
+            <PackageGroupRef Id="InstallerPackages" />
+        </Chain>
+    </Bundle>
+
+    <!-- Visual C++ runtime -->
+    <Fragment>
+        <PackageGroup Id="VCRuntime">
+            <ExePackage Id="vc_redist.x64.exe" Name="vc_redist.x64.exe" DisplayName="Microsoft Visual C++ 2015-2019 Redistributable (x64)" Cache="no" Compressed="yes" Permanent="yes" Protocol="burn" InstallCondition="VersionNT64" DetectCondition="VCRedist2015x64 >= VCRedist2015" SourceFile="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\v142\vc_redist.x64.exe" InstallCommand="/install /quiet /norestart" RepairCommand="/install /quiet /norestart" UninstallCommand="/uninstall /quiet /norestart" PerMachine="yes" />
+        </PackageGroup>
+    </Fragment>
+
+    <!-- Example App -->
+    <Fragment>
+        <PackageGroup Id="InstallerPackages">
+            <MsiPackage DisplayName="Install Example App" SourceFile="..\MSI\bin\Release\MSI.msi" Cache="no" Visible="no" DisplayInternalUI="no" Compressed="yes" InstallCondition="VersionNT64" ForcePerMachine="no">
+                <!-- 
+                This setting "MSIFASTINSTALL" prevents the intaller from
+                creating a Windows system restore point.
+
+                On some Windows machine, the system restore function might be
+                broken, and it causes the machine to hang when trying to create
+                a new system restore point, and it also cuases our installer to
+                hang.
+                -->
+                <MsiProperty Name="MSIFASTINSTALL" Value="1" />
+            </MsiPackage>
+        </PackageGroup>
+    </Fragment>
+</Wix>
