@@ -1,5 +1,5 @@
 name: flutter_wix_installer_example
-description: Demonstrate how to use WIX to create an installer for Flutter Windows app
+description: Demonstrate how to use WiX toolset to create an installer for Flutter Windows app
 publish_to: 'none'
 version: 1.0.0+1
 

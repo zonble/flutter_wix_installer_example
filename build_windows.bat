@@ -7,10 +7,10 @@ ECHO "= Start to build Example App ="
 ECHO "=============================="
 
 ECHO "Step 1 Clean"
-@REM cmd /c git clean -f
-@REM cmd /c flutter clean
-cmd /c del installer\wix\Bundle\bin\Release\ArkSPRSimulator.wixpdb
-cmd /c del installer\wix\Bundle\bin\Release\ArkSPRSimulator.exe
+cmd /c git clean -f
+cmd /c flutter clean
+cmd /c del installer\wix\Bundle\bin\Release\Bundle.wixpdb
+cmd /c del installer\wix\Bundle\bin\Release\Bundle.exe
 cmd /c del /F /Q build
 if exist build\windows\runner\Debug (
     ECHO "Cannot delete build dir, is the app running in debug mode?"
