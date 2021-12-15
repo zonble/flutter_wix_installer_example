@@ -48,14 +48,14 @@
                              take a look at your "build\windows\runner\Release"
                              folder. All the files under that folder should be
                              included. -->
-                        <Component Id="Main" Guid="e5c6ee93-39eb-4224-9020-b6d68b4d3d71">
+                        <Component Id="Main" Guid="e5c6ee93-39eb-4224-9020-b6d68b4d3d71" Win64="yes">
                             <!-- The main folder. If your app use additional
                                  plugins, you need to add the dll files here. -->
                             <File Id="flutter_wix_installer_example" Source="..\..\..\build\windows\runner\Release\flutter_wix_installer_example.exe" />
                             <File Id="flutter_windows" Source="..\..\..\build\windows\runner\Release\flutter_windows.dll" />
                             <RemoveFile Id="RemoveFilesFromAppDirectory" Name="*.*" On="uninstall" />
                         </Component>
-                        <Component Id="RegValInstallLocation_comp" Guid="ef1875c0-901d-4f19-b4aa-d4061ccc86df">
+                        <Component Id="RegValInstallLocation_comp" Guid="ef1875c0-901d-4f19-b4aa-d4061ccc86df" Win64="yes">
                             <!-- Please change Your_Company and Example_App.
                                  Also, please change HKCU to HKLM if you want to
                                  install your app for per machine. -->
@@ -65,12 +65,12 @@
                         </Component>
 
                         <Directory Id="DATA" Name="data">
-                            <Component Id="Data" Guid="70d420a4-7705-4011-a616-51ed87706866">
+                            <Component Id="Data" Guid="70d420a4-7705-4011-a616-51ed87706866" Win64="yes">
                                 <File Source="..\..\..\build\windows\runner\Release\data\app.so" />
                                 <File Id="flutter_icudtl" Source="..\..\..\build\windows\runner\Release\data\icudtl.dat" />
                             </Component>
                             <Directory Id="FLUTTER_ASSETS" Name="flutter_assets">
-                                <Component Id="AssetsRoot" Guid="a9c3f3a5-ad77-43c9-90b1-2639dc89f6d5">
+                                <Component Id="AssetsRoot" Guid="a9c3f3a5-ad77-43c9-90b1-2639dc89f6d5" Win64="yes">
                                     <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\AssetManifest.json" />
                                     <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\FontManifest.json" />
                                 </Component>
@@ -90,7 +90,7 @@
                                 <Directory Id="PACKAGES" Name="packages">
                                     <Directory Id="CUPERTINO_ICONS" Name="cupertino_icons">
                                         <Directory Id="CUPERTINO_ICONS_ASSETS" Name="assets">
-                                            <Component Id="CuppertinoIconsAssets" Guid="af900c61-a1c2-4d18-8f14-b307d9627620">
+                                            <Component Id="CuppertinoIconsAssets" Guid="af900c61-a1c2-4d18-8f14-b307d9627620" Win64="yes">
                                                 <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\cupertino_icons\assets\CupertinoIcons.ttf" />
                                             </Component>
                                         </Directory>
@@ -100,7 +100,7 @@
                                     <Directory Id="FONT_AWESOME_FLUTTER" Name="font_awesome_flutter">
                                         <Directory Id="FONT_AWESOME_FLUTTER_LIB" Name="lib">
                                             <Directory Id="FONT_AWESOME_FLUTTER_FONTS" Name="fonts">
-                                                <Component Id="FontAwesomeAssets" Guid="d630be41-15bd-4b23-bbe8-39af83686171">
+                                                <Component Id="FontAwesomeAssets" Guid="d630be41-15bd-4b23-bbe8-39af83686171" Win64="yes">
                                                     <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-brands-400.ttf" />
                                                     <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-regular-400.ttf" />
                                                     <File Source="..\..\..\build\windows\runner\Release\data\flutter_assets\packages\font_awesome_flutter\lib\fonts\fa-solid-900.ttf" />
